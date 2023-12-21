@@ -34,5 +34,4 @@ jobs:
     uses: ./.github/workflows/_reusable_delete-workflow-artifacts.yml
     with:
       excludes: |
-        hello2
         hello
