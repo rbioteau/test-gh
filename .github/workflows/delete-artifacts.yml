@@ -33,7 +33,3 @@ jobs:
     permissions:
       actions: write 
     uses: ./.github/workflows/_reusable_delete-workflow-artifacts.yml
-    with:
-      excludes: |
-        hello
-        hello2
