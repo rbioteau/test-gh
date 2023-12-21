@@ -31,8 +31,9 @@ jobs:
   clean-artifacts:
     needs: build
     runs-on: ubuntu-22.04
+    permissions:
+      actions: write 
     steps:
-    
       - uses: christian-korneck/delete-run-artifacts-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
