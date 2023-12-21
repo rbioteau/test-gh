@@ -41,7 +41,6 @@ jobs:
            --jq '[.artifacts[] | .id]')
       
          echo $artifacts 
-         #echo ${{ fromJson($artifacts) }}
          for artifactId in $artifacts
          do
             echo "Deleting $artifactId..."
