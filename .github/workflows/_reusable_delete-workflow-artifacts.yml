@@ -14,7 +14,7 @@ jobs:
     steps:
       - run: |
          
-         excludes = echo -en "${{ inputs.excludes }}" | jq --raw-input . | jq --slurp . | jq @sh
+         excludes = $(echo -en "${{ inputs.excludes }}" | jq --raw-input . | jq --slurp . | jq @sh)
          echo "$excludes"
          artifacts="$(gh api \
            -H "Accept: application/vnd.github+json" \
