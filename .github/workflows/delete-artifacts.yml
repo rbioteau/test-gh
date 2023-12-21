@@ -29,32 +29,10 @@ jobs:
           retention-days: 1
             
   clean-artifacts:
-    needs: build
-    runs-on: ubuntu-22.04
     permissions:
       actions: write 
-    steps:
-      
-      - run: |
-      
-         artifacts="$(gh api \
-           -H "Accept: application/vnd.github+json" \
-           -H "X-GitHub-Api-Version: 2022-11-28" \
-           /repos/$OWNER/$REPO/actions/runs/${{ github.run_id }}/artifacts \
-           --jq '[.artifacts[] | .id ] | @sh')"
-      
-         for artifactId in $artifacts
-         do
-            echo "Deleting $artifactId artifact..."
-            gh api \
-              --method DELETE \
-              -H "Accept: application/vnd.github+json" \
-              -H "X-GitHub-Api-Version: 2022-11-28" \
-              /repos/$OWNER/$REPO/actions/artifacts/$artifactId
-         done
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OWNER: ${{ github.repository_owner }}
-          REPO: ${{ github.event.repository.name }}
-        
-        
+    uses: ./.github/workflows/_reusable_delete-workflow-artifacts.yml
+    with:
+      excludes: |
+        hello2
+        hello
