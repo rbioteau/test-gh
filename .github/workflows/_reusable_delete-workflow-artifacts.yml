@@ -24,6 +24,7 @@ jobs:
       
          for artifactId in $artifacts
          do
+            echo $artifactId
             if [[ $artifactId ]] && [[ $artifactId -ne "" ]] ; then
               echo "Deleting $artifactId artifact..."
               gh api \
