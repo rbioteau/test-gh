@@ -22,7 +22,6 @@ jobs:
            /repos/$OWNER/$REPO/actions/runs/${{ github.run_id }}/artifacts \
            | jq --arg excludes "$excludes"  '[.artifacts[] | select([.name] | inside([$excludes]) | not ) | .id ] | @sh')"
       
-         echo $artifacts
          for artifactId in $artifacts
          do
             artifactId=${artifactId//\"/}
