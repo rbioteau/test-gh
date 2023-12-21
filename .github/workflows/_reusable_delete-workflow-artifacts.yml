@@ -14,7 +14,8 @@ jobs:
     steps:
       - run: |
         
-         excludes="$(echo "${{ inputs.excludes }}" | jq -R -r -s -c 'split("\n") | map(select(length>0))')"
+         excludes="$(echo "${{ inputs.excludes }}")
+         excludes="$(echo "${excludes%%*( )}" | jq -R -r -s -c 'split("\n") | map(select(length>0))')"
          echo $excludes
          artifacts="$(gh api \
            -H "Accept: application/vnd.github+json" \
