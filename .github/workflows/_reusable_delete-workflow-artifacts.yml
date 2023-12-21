@@ -24,7 +24,7 @@ jobs:
       
          for artifactId in $artifacts
          do
-            if [ -n $artifactId ]; then
+            if test -n "$artifactId" ; then
               echo "Deleting $artifactId artifact..."
               gh api \
                 --method DELETE \
