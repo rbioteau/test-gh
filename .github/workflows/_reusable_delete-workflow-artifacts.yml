@@ -18,7 +18,7 @@ jobs:
            -H "Accept: application/vnd.github+json" \
            -H "X-GitHub-Api-Version: 2022-11-28" \
            /repos/$OWNER/$REPO/actions/runs/${{ github.run_id }}/artifacts \
-           --jq '[.artifacts[] | select([.name] | inside('${excludes}') | not ) | .id ] | @sh')"
+           | jq --arg excludes $excludes  '[.artifacts[] | select([.name] | inside([$excludes]) | not ) | .id ] | @sh')"
       
          for artifactId in $artifacts
          do
