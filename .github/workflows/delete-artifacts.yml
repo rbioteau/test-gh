@@ -17,7 +17,7 @@ jobs:
       - name: Upload Hello
         uses: actions/upload-artifact@v4
         with:
-          name: hello
+          name: hello world
           path: hello.txt
           retention-days: 1
           
@@ -35,6 +35,6 @@ jobs:
     uses: ./.github/workflows/_reusable_delete-workflow-artifacts.yml
     with:
       excludes: |
-        hello
+        hello world
         
         
