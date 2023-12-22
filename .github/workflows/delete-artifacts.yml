@@ -52,15 +52,25 @@ jobs:
     if: ${{ fromJson(needs.build.outputs.build_options).zip != '' }} 
     strategy:
       matrix: 
-        artifact: [ archive-community, archive-enterprise ]
+        artifact: [ hello2, hello world ]
+        include:
+          - artifact: hello2
+            filename: hello2.txt
+          - artifact: hello world
+            filename: hello.txt
     steps:
+    
+      - name: Download binaries 
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+      
       - name: Upload Binaries to Google Drive
         uses: adityak74/google-drive-upload-git-action@main
         with:
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_CREDENTIALS }}
-          filename: ./build/distributions/multitenant-to-multiruntime-tool.zip
+          filename: ${{ matrix.filename }}
           overwrite: true
-          folderId: ${{ secrets.GDRIVE_RELEASE_FOLDER_MT2MR_TOOL }}
-          name: bonita-mt2mr-tool-${{ inputs.version }}.zip
+          folderId: ${{ secrets.GDRIVE_STUDIO_SNAPSHOTS_FOLDER }}
          
         
