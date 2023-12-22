@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
+    outputs:
+      build_options: ${{ steps.options.outputs.BUILD_OPTIONS }}
     steps:
     
       - name: Build Options
