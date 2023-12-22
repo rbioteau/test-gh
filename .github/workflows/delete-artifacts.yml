@@ -11,17 +11,23 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     
-      - name: Read Pull Request Options
-        if:  ${{ github.event.pull_request != null }}
+      - name: Build Options
+        id: options
         run: |
-          echo "BUILD_OPTIONS=$(jq -n -c \
-            --arg executeIT  ${{ contains(github.event.pull_request.body, '!executeIT') }} \
-            --arg zip  ${{ contains(github.event.pull_request.body, '!zip') }} \
-            '{"executeIT" : (if $executeIT == "true" then "-Pit" else "" end), "zip" : (if $zip == "true" then "-Pall-in-one" else "" end) }')" >> $GITHUB_ENV
+          if [[ ${{ github.event.pull_request }} ]]; then
+            echo "BUILD_OPTIONS=$(jq -n -c \
+              --arg executeIT  ${{ contains(github.event.pull_request.body, '!executeIT') }} \
+              --arg zip  ${{ contains(github.event.pull_request.body, '!zip') }} \
+              --arg skipTests  ${{ contains(github.event.pull_request.body, '!skipTests') }} \
+             '{"executeIT" : (if $executeIT == "true" then "-Pit" else "" end), "zip" : (if $zip == "true" then "-Pall-in-one" else "" end), "skipTests" : (if $skipTests == "true" then "-DskipTests" else "" end) }')" >> $GITHUB_OUTPUT
+          else
+            echo "BUILD_OPTIONS=$(jq -n -c \
+              '{"executeIT" : "-Pit", "zip" : "-Pall-in-one", "skipTests" : ""}')" >> $GITHUB_OUTPUT
+          fi
                 
       - name: Create file
         run: |
-          echo "${{ fromJson(env.BUILD_OPTIONS).zip}}" > hello.txt
+          echo "${{ fromJson(steps.options.outputs.BUILD_OPTIONS).zip}}" > hello.txt
           echo "$BUILD_OPTIONS" > hello2.txt
           
       - name: Upload Hello
@@ -37,5 +43,21 @@ jobs:
           name: hello2
           path: hello2.txt
           retention-days: 1
-        
+
+  gdrive-upload:
+    needs: build
+    runs-on: ubuntu-22.04
+    if: ${{ fromJson(needs.build.outputs.build_options).zip != "" }} 
+    strategy:
+      matrix: [ archive-community, archive-enterprise ]
+    steps:
+      - name: Upload Binaries to Google Drive
+        uses: adityak74/google-drive-upload-git-action@main
+        with:
+          credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_CREDENTIALS }}
+          filename: ./build/distributions/multitenant-to-multiruntime-tool.zip
+          overwrite: true
+          folderId: ${{ secrets.GDRIVE_RELEASE_FOLDER_MT2MR_TOOL }}
+          name: bonita-mt2mr-tool-${{ inputs.version }}.zip
+         
         
