@@ -16,7 +16,7 @@ jobs:
         run: |
           echo "BUILD_OPTIONS=$(jq -n -c \
             --arg executeIT  ${{ contains(github.event.pull_request.body, '!executeIT') }} \
-            '{"executeIT" : $executeIT }')" >> $GITHUB_ENV
+            '{"executeIT" : if $executeIT then "-Pit" else "" end}')" >> $GITHUB_ENV
                 
                 
       - name: Create file
