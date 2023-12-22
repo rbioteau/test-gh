@@ -18,7 +18,7 @@ jobs:
             --arg executeIT  ${{ contains(github.event.pull_request.body, '!executeIT') }} \
             --arg zip  ${{ contains(github.event.pull_request.body, '!zip') }} \
             '{"executeIT" : (if $executeIT then "-Pit" else "" end), \
-              "zip" : (if $zip then "-Pall-in-one" else "" end) }')" >> $GITHUB_ENV
+            "zip" : (if $zip then "-Pall-in-one" else "" end) }')" >> $GITHUB_ENV
                 
                 
       - name: Create file
