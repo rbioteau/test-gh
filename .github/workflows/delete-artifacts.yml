@@ -49,7 +49,7 @@ jobs:
   gdrive-upload:
     needs: build
     runs-on: ubuntu-22.04
-    if: ${{ fromJson(needs.build.outputs.build_options).zip != "" }} 
+    if: ${{ fromJson(needs.build.outputs.build_options).zip != '' }} 
     strategy:
       matrix: [ archive-community, archive-enterprise ]
     steps:
