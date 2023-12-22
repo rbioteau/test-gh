@@ -16,7 +16,7 @@ jobs:
       - name: Build Options
         id: options
         run: |
-          if [[ ${{ github.event.pull_request }} ]]; then
+          if [[ ${{ github.event.pull_request != null }} = "true" ]]; then
             echo "BUILD_OPTIONS=$(jq -n -c \
               --arg executeIT  ${{ contains(github.event.pull_request.body, '!executeIT') }} \
               --arg zip  ${{ contains(github.event.pull_request.body, '!zip') }} \
@@ -30,7 +30,7 @@ jobs:
       - name: Create file
         run: |
           echo "${{ fromJson(steps.options.outputs.BUILD_OPTIONS).zip}}" > hello.txt
-          echo "$BUILD_OPTIONS" > hello2.txt
+          echo "${{ steps.options.outputs.BUILD_OPTIONS }}" > hello2.txt
           
       - name: Upload Hello
         uses: actions/upload-artifact@v4
