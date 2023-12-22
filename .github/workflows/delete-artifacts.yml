@@ -64,6 +64,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.artifact }}
+          path: ${{github.ref_name }}/
       
       - name: Upload Binaries to Google Drive
         uses: adityak74/google-drive-upload-git-action@main
@@ -71,5 +72,7 @@ jobs:
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_CREDENTIALS }}
           filename: ${{ matrix.filename }}
           folderId: ${{ secrets.GDRIVE_STUDIO_SNAPSHOTS_FOLDER }}
+          overwrite: true
+          mirrorDirectoryStructure: true
          
         
