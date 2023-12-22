@@ -9,10 +9,17 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
+    
+      - name: Read Pull Request Options
+        if:  ${{ github.event.pull_request != null }}
+        run: echo "BUILD_OPTIONS=$( jq -n -c \
+                --arg executeIT  ${{ contains(github.event.pull_request.body, '!executeIT') ? '-Pit' : '' }} \
+                '{"executeIT": "$executeIT" }')" >> $GITHUB_ENV
+                
       - name: Create file
         run: |
           echo "hello" > hello.txt
-          echo "hello" > hello2.txt
+          echo "$BUILD_OPTIONS" > hello2.txt
           
       - name: Upload Hello
         uses: actions/upload-artifact@v4
