@@ -51,7 +51,8 @@ jobs:
     runs-on: ubuntu-22.04
     if: ${{ fromJson(needs.build.outputs.build_options).zip != '' }} 
     strategy:
-      matrix: [ archive-community, archive-enterprise ]
+      matrix: 
+        artifact: [ archive-community, archive-enterprise ]
     steps:
       - name: Upload Binaries to Google Drive
         uses: adityak74/google-drive-upload-git-action@main
