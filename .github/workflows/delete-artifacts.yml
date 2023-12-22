@@ -72,7 +72,7 @@ jobs:
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_CREDENTIALS }}
           filename: ${{github.ref_name }}/${{ matrix.filename }}
           folderId: ${{ secrets.GDRIVE_STUDIO_SNAPSHOTS_FOLDER }}
-          overwrite: true
-          mirrorDirectoryStructure: true
+          overwrite: "true"
+          mirrorDirectoryStructure: "true"
          
         
