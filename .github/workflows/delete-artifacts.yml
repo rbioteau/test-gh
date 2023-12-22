@@ -68,7 +68,7 @@ jobs:
       - name: Upload Binaries to Google Drive
         uses: willo32/google-drive-upload-action@master
         with:
-          target: ${{ matrix.artifact }}
+          target: ${{ matrix.filename }}
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_CREDENTIALS }}
           parent_folder_id: ${{ secrets.GDRIVE_STUDIO_SNAPSHOTS_FOLDER }}
           child_folder: ${{github.ref_name }}
