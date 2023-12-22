@@ -72,5 +72,6 @@ jobs:
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_CREDENTIALS }}
           parent_folder_id: ${{ secrets.GDRIVE_STUDIO_SNAPSHOTS_FOLDER }}
           child_folder: ${{github.ref_name }}
+          overwrite: true
          
         
