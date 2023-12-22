@@ -21,7 +21,7 @@ jobs:
                 
       - name: Create file
         run: |
-          echo "hello" > hello.txt
+          echo "$BUILD_OPTIONS" > hello.txt
           echo "$BUILD_OPTIONS" > hello2.txt
           
       - name: Upload Hello
