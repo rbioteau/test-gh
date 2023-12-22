@@ -3,16 +3,34 @@ name: Test
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+  pull_request:
 
 
 jobs:
   build:
     runs-on: ubuntu-22.04
+    outputs:
+      build_options: ${{ steps.options.outputs.BUILD_OPTIONS }}
     steps:
+    
+      - name: Build Options
+        id: options
+        run: |
+          if [[ ${{ github.event.pull_request != null }} = "true" ]]; then
+            echo "BUILD_OPTIONS=$(jq -n -c \
+              --arg executeIT  ${{ contains(github.event.pull_request.body, '!executeIT') }} \
+              --arg zip  ${{ contains(github.event.pull_request.body, '!zip') }} \
+              --arg skipTests  ${{ contains(github.event.pull_request.body, '!skipTests') }} \
+             '{"executeIT" : (if $executeIT == "true" then "-Pit" else "" end), "zip" : (if $zip == "true" then "-Pall-in-one" else "" end), "skipTests" : (if $skipTests == "true" then "-DskipTests" else "" end) }')" >> $GITHUB_OUTPUT
+          else
+            echo "BUILD_OPTIONS=$(jq -n -c \
+              '{"executeIT" : "-Pit", "zip" : "-Pall-in-one", "skipTests" : ""}')" >> $GITHUB_OUTPUT
+          fi
+                
       - name: Create file
         run: |
-          echo "hello" > hello.txt
-          echo "hello" > hello2.txt
+          echo "${{ fromJson(steps.options.outputs.BUILD_OPTIONS).zip}}" > hello.txt
+          echo "${{ steps.options.outputs.BUILD_OPTIONS }}" > hello2.txt
           
       - name: Upload Hello
         uses: actions/upload-artifact@v4
@@ -27,14 +45,32 @@ jobs:
           name: hello2
           path: hello2.txt
           retention-days: 1
-            
-  clean-artifacts:
+          
+  gdrive-upload:
     needs: build
-    permissions:
-      actions: write 
-    uses: ./.github/workflows/_reusable_delete-workflow-artifacts.yml
-    with:
-      excludes: |
-        hello world
-        
+    runs-on: ubuntu-22.04
+    if: ${{ fromJson(needs.build.outputs.build_options).zip != '' }} 
+    strategy:
+      matrix: 
+        artifact: [ hello2, hello world ]
+        include:
+          - artifact: hello2
+            filename: hello2.txt
+          - artifact: hello world
+            filename: hello.txt
+    steps:
+    
+      - name: Download binaries 
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+      
+      - name: Upload Binaries to Google Drive
+        uses: adityak74/google-drive-upload-git-action@main
+        with:
+          credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_CREDENTIALS }}
+          filename: ${{ matrix.filename }}
+          overwrite: true
+          folderId: ${{ secrets.GDRIVE_STUDIO_SNAPSHOTS_FOLDER }}
+         
         
