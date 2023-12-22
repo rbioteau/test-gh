@@ -70,7 +70,7 @@ jobs:
         uses: adityak74/google-drive-upload-git-action@main
         with:
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_CREDENTIALS }}
-          filename: ${{ matrix.filename }}
+          filename: ${{github.ref_name }}/${{ matrix.filename }}
           folderId: ${{ secrets.GDRIVE_STUDIO_SNAPSHOTS_FOLDER }}
           overwrite: true
           mirrorDirectoryStructure: true
