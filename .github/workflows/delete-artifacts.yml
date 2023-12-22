@@ -12,9 +12,11 @@ jobs:
     
       - name: Read Pull Request Options
         if:  ${{ github.event.pull_request != null }}
-        run: echo "BUILD_OPTIONS=$( jq -n -c \
-                --arg executeIT  ${{ contains(github.event.pull_request.body, '!executeIT') ? '-Pit' : '' }} \
-                '{"executeIT": "$executeIT" }')" >> $GITHUB_ENV
+        run: |
+          echo "BUILD_OPTIONS=$(jq -n -c \
+            --arg executeIT  ${{ contains(github.event.pull_request.body, '!executeIT') ? '-Pit' : '' }} \
+            '{"executeIT" : $executeIT }')" >> $GITHUB_ENV
+                
                 
       - name: Create file
         run: |
