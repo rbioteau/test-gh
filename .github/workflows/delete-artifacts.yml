@@ -21,7 +21,7 @@ jobs:
                 
       - name: Create file
         run: |
-          echo "$BUILD_OPTIONS" > hello.txt
+          echo "${{ fromJson(env.BUILD_OPTIONS).zip}}" > hello.txt
           echo "$BUILD_OPTIONS" > hello2.txt
           
       - name: Upload Hello
