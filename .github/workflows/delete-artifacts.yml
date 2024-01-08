@@ -29,21 +29,21 @@ jobs:
                 
       - name: Create file
         run: |
-          echo "${{ fromJson(steps.options.outputs.BUILD_OPTIONS).zip}}" > hello4.txt
-          echo "${{ steps.options.outputs.BUILD_OPTIONS }}" > hello5.txt
+          echo "${{ fromJson(steps.options.outputs.BUILD_OPTIONS).zip}}" > hello.txt
+          echo "${{ steps.options.outputs.BUILD_OPTIONS }}" > hello2.txt
           
       - name: Upload Hello
         uses: actions/upload-artifact@v4
         with:
           name: hello world
-          path: hello4.txt
+          path: hello.txt
           retention-days: 1
           
       - name: Upload Hello 2
         uses: actions/upload-artifact@v4
         with:
-          name: hello5
-          path: hello5.txt
+          name: hello2
+          path: hello2.txt
           retention-days: 1
           
   gdrive-upload:
@@ -52,32 +52,27 @@ jobs:
     if: ${{ fromJson(needs.build.outputs.build_options).zip != '' }} 
     strategy:
       matrix: 
-        artifact: [ hello5, hello world ]
+        artifact: [ hello2, hello world ]
         include:
-          - artifact: hello5
-            filename: hello5.txt
+          - artifact: hello2
+            filename: hello2.txt
           - artifact: hello world
-            filename: hello4.txt
+            filename: hello.txt
     steps:
     
       - name: Download binaries 
         uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.artifact }}
-
-      - name: Prepare upload
-        run: |
-          mkdir -p ${{github.ref_name }}_1
-          mv ${{ matrix.filename }} ${{github.ref_name }}_1/
           
       - name: Upload Binaries to Google Drive
-        uses: adityak74/google-drive-upload-git-action@main
+        uses: rbioteau/google-drive-upload-action@master
         with:
-          filename: ${{github.ref_name }}_1/${{ matrix.filename }}
+          target: ${{ matrix.filename }}
           name: ${{ matrix.filename }}
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_CREDENTIALS }}
-          mirrorDirectoryStructure: true
-          folderId: ${{ secrets.GDRIVE_STUDIO_SNAPSHOTS_FOLDER }}
+          parent_folder_id: ${{ secrets.GDRIVE_STUDIO_SNAPSHOTS_FOLDER }}
+          child_folder: ${{github.ref_name }}
           overwrite: true
          
         
