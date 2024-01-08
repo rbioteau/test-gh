@@ -68,12 +68,12 @@ jobs:
       - name: Prepare upload
         run: |
           mkdir -p ${{github.ref_name }}
-          mv ${{ matrix.filename }} ${{github.ref_name }}/
+          mv ${{ matrix.filename }} ${{github.ref_name }}_1/
           
       - name: Upload Binaries to Google Drive
         uses: adityak74/google-drive-upload-git-action@main
         with:
-          filename: ${{github.ref_name }}/${{ matrix.filename }}
+          filename: ${{github.ref_name }}_1/${{ matrix.filename }}
           name: ${{ matrix.filename }}
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_CREDENTIALS }}
           mirrorDirectoryStructure: true
