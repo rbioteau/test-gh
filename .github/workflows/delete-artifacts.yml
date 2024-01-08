@@ -29,21 +29,21 @@ jobs:
                 
       - name: Create file
         run: |
-          echo "${{ fromJson(steps.options.outputs.BUILD_OPTIONS).zip}}" > hello.txt
-          echo "${{ steps.options.outputs.BUILD_OPTIONS }}" > hello2.txt
+          echo "${{ fromJson(steps.options.outputs.BUILD_OPTIONS).zip}}" > hello4.txt
+          echo "${{ steps.options.outputs.BUILD_OPTIONS }}" > hello5.txt
           
       - name: Upload Hello
         uses: actions/upload-artifact@v4
         with:
           name: hello world
-          path: hello.txt
+          path: hello4.txt
           retention-days: 1
           
       - name: Upload Hello 2
         uses: actions/upload-artifact@v4
         with:
-          name: hello2
-          path: hello2.txt
+          name: hello5
+          path: hello5.txt
           retention-days: 1
           
   gdrive-upload:
@@ -52,12 +52,12 @@ jobs:
     if: ${{ fromJson(needs.build.outputs.build_options).zip != '' }} 
     strategy:
       matrix: 
-        artifact: [ hello2, hello world ]
+        artifact: [ hello5, hello world ]
         include:
-          - artifact: hello2
-            filename: hello2.txt
+          - artifact: hello5
+            filename: hello5.txt
           - artifact: hello world
-            filename: hello.txt
+            filename: hello4.txt
     steps:
     
       - name: Download binaries 
