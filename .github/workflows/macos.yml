@@ -1,0 +1,50 @@
+name: Test
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  pull_request:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps: 
+      - run: |
+          mkdir -p app/toto.app/
+          touch app/toto.app/toto.txt
+          touch toto.dmg
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app
+          path: app
+          retention-days: 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dmg
+          path: toto.dmg
+          retention-days: 1
+      
+  macOs-codesign:
+    needs: build
+    strategy:
+      matrix:
+        artifact: [app, dmg]
+        include:
+          - artifact: app
+            filename: toto.app
+          - artifact: dmg
+            filename: toto.dmg
+    uses: ./.github/workflows/_reusable_macOs_codesign.yml
+    secrets:
+      certificateData: ${{ secrets.APPLE_CERT_DATA }}
+      certificatePassword: ${{ secrets.APPLE_CERT_PASSWORD }}
+      notorizationUser: ${{ secrets.APPLE_NOTARY_USER }}
+      notorizationPassword:  ${{ secrets.APPLE_NOTARY_PASSWORD }}
+      teamId: ${{ secrets.APPLE_TEAM_ID }}
+      entitlements: ${{ secrets.APPLE_ENTITLEMENTS_XML }}
+    with:
+      input-artifact: ${{ matrix.artifact}}
+      output-artifact: ${{ matrix.artifact}}-signed
+      filename: ${{ matrix.filename }}
+      attachStaple: true

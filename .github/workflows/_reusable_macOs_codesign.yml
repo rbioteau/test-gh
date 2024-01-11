@@ -1,0 +1,53 @@
+name: macOs Codesign
+
+on:
+  workflow_call:
+    inputs:
+      input-artifact:
+        required: true
+        type: string
+      output-artifact:
+        required: true
+        type: string
+      filename:
+        required: true
+        type: string 
+      attachStaple:
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      certificateData:
+        required: true
+      certificatePassword:
+        required: true
+      notorizationUser:
+        required: true
+      notorizationPassword:
+        required: true
+      teamId:
+        required: true
+      entitlements:
+        required: true
+
+jobs:
+  codesign:
+    runs-on: macOs-13
+    steps:
+      - name: Download binary 
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.input-artifact }}
+          path: binary
+         
+      - name: Notorize binary 
+        run: |
+         
+         if [[ "${{  inputs.filename }}" == *.dmg ]]
+         then
+           echo "dmg"
+         else
+           echo "other" 
+         fi
+        
+    
