@@ -22,7 +22,8 @@ jobs:
         with:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
       - run: |
-          git merge --ours origin/${{ github.ref_name}}
+          git config merge.ours.driver true
+          git merge origin/${{ github.ref_name}}
       - uses: peter-evans/create-pull-request@v6
         id: create-pr
         with:
