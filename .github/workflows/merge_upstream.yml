@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Determine upstream branch
         id: upstream-branch
-        run: echo "ref=$(echo ${{ fromJson(vars.SUPPORTED_BRANCHES).upstream-branch }} | jq ."${{ github.ref_name}}")" >> $GITHUB_OUTPUT
+        run: echo "ref=$(echo ${{ vars.SUPPORTED_BRANCHES }} | jq .upstream-branch."${{ github.ref_name}}")" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # All history retrieved
@@ -23,7 +23,7 @@ jobs:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
       - run: |
           git config merge.ours.driver true
-          git merge --ours origin/${{ github.ref_name}}
+          git merge origin/${{ github.ref_name}}
       - uses: peter-evans/create-pull-request@v6
         id: create-pr
         with:
