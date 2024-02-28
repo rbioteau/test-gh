@@ -14,6 +14,8 @@ jobs:
         id: upstream-branch
         run: echo "ref=${{ fromJson(vars.SUPPORTED_BRANCHES).upstream-branch[github.ref_name] }}" >> $GITHUB_OUTPUT
       - id: create-pr
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: >
           gh pr create
           --base ${{ steps.upstream-branch.outputs.ref }}
