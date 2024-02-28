@@ -19,6 +19,7 @@ jobs:
         run: >
           gh pr create
           --base ${{ steps.upstream-branch.outputs.ref }}
+          --head ${{ github.ref }}
           --title "[merge] ${{ github.ref_name}} into ${{ steps.upstream-branch.outputs.ref }}"
           --body "Pull request opened automatically. Use Merge Pull Request action (DO NOT SQUASH)"
           --label automerge
