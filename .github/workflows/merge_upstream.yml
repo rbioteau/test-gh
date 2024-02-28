@@ -1,0 +1,42 @@
+name: Create Merge Request Upstream
+
+on:
+  workflow_dispatch: 
+  push:
+    branches: 
+      - '1.0.x'
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Determine upstream branch
+        id: upstream-branch
+        run: echo "ref=$(echo ${{ toJson(vars.SUPPORTED_BRANCHES).upstream-branch }} | jq .${{ github.ref_name}})" >> $GITHUB_OUTPUT
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # All history retrieved
+          ref: ${{ steps.upstream-branch.outputs.ref }}
+      - uses: bonitasoft/git-setup-action@v1
+        id: git-setup
+        with:
+          keeper-secret-config: ${{ secrets.KSM_CONFIG }}
+      - run: |
+          git merge --ours origin/${{ github.ref_name}}
+      - uses: peter-evans/create-pull-request@v6
+        id: create-pr
+        with:
+          branch: chore/merge/${{ github.ref_name }}
+          base:  ${{ steps.upstream-branch.outputs.ref }}
+          author: ${{ steps.git-setup.outputs.name}} <${{ steps.git-setup.outputs.email}}>
+          committer: ${{ steps.git-setup.outputs.name}} <${{ steps.git-setup.outputs.email}}>
+          commit-message: "chore(l10n) update translations"
+          title: "[Merge] ${{ github.ref_name}} into ${{ steps.upstream-branch.outputs.ref }}"
+          labels: |
+            automerge
+          body: |
+            This pull request has been automatically opened.
+            It's purpose is to propagate fixes into upstream branches.
+      
+
+        
