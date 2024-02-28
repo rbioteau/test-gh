@@ -14,8 +14,6 @@ jobs:
         id: upstream-branch
         run: echo "ref=${{ fromJson(vars.SUPPORTED_BRANCHES).upstream-branch[github.ref_name] }}" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v4 
-        with:
-          ref: ${{ steps.upstream-branch.outputs.ref }}
       - id: create-pr
         env:
           GH_TOKEN: ${{ github.token }}
