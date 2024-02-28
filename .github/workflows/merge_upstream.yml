@@ -13,9 +13,11 @@ jobs:
       - name: Determine upstream branch
         id: upstream-branch
         run: |
-         echo "ref=$(cat << EOF
+         branches=$(cat << EOF
            ${{ vars.SUPPORTED_BRANCHES }}
-           EOF | jq .upstream-branch."${{ github.ref_name}}")" >> $GITHUB_OUTPUT
+           EOF
+           )
+         echo "branches | jq .upstream-branch."${{ github.ref_name}}")" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # All history retrieved
