@@ -21,18 +21,14 @@ jobs:
         id: git-setup
         with:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
-      - run: |
-          git config merge.ours.driver true
-          git merge origin/${{ github.ref_name}}
       - uses: peter-evans/create-pull-request@v6
         id: create-pr
         with:
-          branch: chore/merge/${{ github.ref_name }}
+          branch:  ${{ github.ref_name }}
           base:  ${{ steps.upstream-branch.outputs.ref }}
           author: ${{ steps.git-setup.outputs.name}} <${{ steps.git-setup.outputs.email}}>
           committer: ${{ steps.git-setup.outputs.name}} <${{ steps.git-setup.outputs.email}}>
-          commit-message: "chore(l10n) update translations"
-          title: "[Merge] ${{ github.ref_name}} into ${{ steps.upstream-branch.outputs.ref }}"
+          title: "[merge] ${{ github.ref_name}} into ${{ steps.upstream-branch.outputs.ref }}"
           labels: |
             automerge
           body: |
