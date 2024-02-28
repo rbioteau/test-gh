@@ -8,10 +8,6 @@ on:
 
 jobs:
   create-pr:
-    permissions: 
-      pull-requests: write
-      actions: write
-      contents: read
     runs-on: ubuntu-22.04
     steps:
       - name: Determine upstream branch
