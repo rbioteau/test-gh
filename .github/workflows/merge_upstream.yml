@@ -9,7 +9,5 @@ on:
 jobs:
   create-merge-pr:
     uses: bonitasoft/github-workflows/.github/workflows/_reusable_create_merge_pr.yml@main
-    with:
-      assignees: ${{ github.actor }}
     secrets: 
       BONITA_CI_PAT: ${{ secrets.BONITA_CI_PAT }}
