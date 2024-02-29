@@ -7,19 +7,6 @@ on:
       - '1.0.x'
 
 jobs:
-  create-pr:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Determine upstream branch
-        id: upstream-branch
-        run: echo "ref=${{ fromJson(vars.SUPPORTED_BRANCHES).upstream-branch[github.ref_name] }}" >> $GITHUB_OUTPUT
-      - uses: actions/checkout@v4 
-      - id: create-pr
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: >
-          gh pr create
-          --base ${{ steps.upstream-branch.outputs.ref }}
-          --title "[merge] ${{ github.ref_name}} into ${{ steps.upstream-branch.outputs.ref }}"
-          --body "Pull request opened automatically. Use Merge Pull Request action (DO NOT SQUASH)"
-          --label automerge
+  create-merge-pr:
+    uses: bonitasoft/github-workflows/.github/workflows/_reusable_create_merge_pr.yml@main
+    secrets: inherit
