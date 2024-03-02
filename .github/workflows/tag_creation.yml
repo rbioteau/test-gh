@@ -1,0 +1,14 @@
+name: Tag created
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.0'
+
+jobs:
+  test-tag-regex:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          echo 'github.ref=${{ github.ref}}'
+          echo 'github.ref_name=${{ github.ref_name}}'
