@@ -1,0 +1,22 @@
+name: Test job output
+
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get-time-stamp:
+    runs-on: ubuntu-22.04
+    outputs:
+      timestamp: ${{ steps.set-timestamp.outputs.timestamp }}
+    steps:
+      - name: Set timestamp
+        id: set-timestamp
+        run: echo "timestamp=$(date +'%Y%m%d_%H%M%S')" >> $GITHUB_OUTPUT
+
+  print-timestamp:
+    needs: get-time-stamp
+    runs-on: ubuntu-22.04
+    steps:
+      - run: |
+          echo "${{ needs.get-time-stamp.outputs.timestamp }}"
