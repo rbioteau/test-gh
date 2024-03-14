@@ -8,6 +8,6 @@ on:
 
 jobs:
   create-merge-pr:
-    uses: bonitasoft/github-workflows/.github/workflows/_reusable_create_merge_pr.yml@main
+    uses: bonitasoft/github-workflows/.github/workflows/_reusable_merge_upstream.yml@main
     secrets: 
       BONITA_CI_PAT: ${{ secrets.BONITA_CI_PAT }}
