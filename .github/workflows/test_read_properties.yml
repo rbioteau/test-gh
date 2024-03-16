@@ -7,8 +7,8 @@ jobs:
   maven-release:
     runs-on: ubuntu-22.04
     outputs:
-      security-version: ${{ steps.release-properties.outputs.project-rel-org-bonitasoft-security-licensing }}
-      manager-version: ${{  steps.release-properties.outputs.project-rel-org-bonitasoft-security-manager-parent }}
+      security-version: ${{ steps.release-properties.outputs['project.rel.org.bonitasoft.security:licensing'] }}
+      manager-version: ${{  steps.release-properties.outputs['project.rel.org.bonitasoft.security:manager-parent'] }}
     steps:
       - uses: actions/checkout@v4
        
