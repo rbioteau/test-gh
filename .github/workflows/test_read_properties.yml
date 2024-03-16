@@ -20,7 +20,7 @@ jobs:
         uses: christian-draeger/read-properties@1.1.1
         with:
           path: './release.properties'
-          properties: 'project.rel.org.bonitasoft.security:licensing project.rel.org.bonitasoft.security:manager-parent'
+          properties: 'project.rel.org.bonitasoft.security\:licensing project.rel.org.bonitasoft.security\:manager-parent'
 
 
   read-output:
