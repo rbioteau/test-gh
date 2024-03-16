@@ -18,8 +18,8 @@ jobs:
         with:
           path: release.properties
           properties: >
-            project.rel.org.bonitasoft.security\:licensing 
-            project.rel.org.bonitasoft.security\:manager-parent
+            project.rel.org.bonitasoft.security:licensing 
+            project.rel.org.bonitasoft.security:manager-parent
 
 
   read-output:
