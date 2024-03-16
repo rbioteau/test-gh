@@ -11,16 +11,15 @@ jobs:
       manager-version: ${{  steps.release-properties.outputs.project-rel-org-bonitasoft-security-manager-parent }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.BONITA_CI_PAT  }}
           
       - name: Read release.properties
         id: release-properties
         uses: christian-draeger/read-properties@1.1.1
         with:
-          path: './release.properties'
-          properties: 'project.rel.org.bonitasoft.security\:licensing project.rel.org.bonitasoft.security\:manager-parent'
+          path: release.properties
+          properties: >
+            project.rel.org.bonitasoft.security\:licensing 
+            project.rel.org.bonitasoft.security\:manager-parent
 
 
   read-output:
