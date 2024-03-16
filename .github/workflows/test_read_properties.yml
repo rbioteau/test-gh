@@ -11,15 +11,12 @@ jobs:
       manager-version: ${{  steps.release-properties.outputs.project-rel-org-bonitasoft-security-manager-parent }}
     steps:
       - uses: actions/checkout@v4
-          
-      - name: Read release.properties
+       
+      - uses: BrycensRanch/read-properties-action@v1
         id: release-properties
-        uses: christian-draeger/read-properties@1.1.1
         with:
-          path: release.properties
-          properties: >
-            project.rel.org.bonitasoft.security:licensing 
-            project.rel.org.bonitasoft.security:manager-parent
+          file: release.properties
+          all: true
 
 
   read-output:
