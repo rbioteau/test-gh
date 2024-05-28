@@ -8,7 +8,7 @@ on:
 
 jobs:
   create-merge-pr:
-    uses: bonitasoft/github-workflows/.github/workflows/_reusable_merge_upstream.yml@main
+    uses: bonitasoft/github-workflows/.github/workflows/_reusable_merge_upstream.yml@fix/merge_upstream_pr
     secrets: 
       BONITA_CI_PAT: ${{ secrets.BONITA_CI_PAT }}
       KSM_CONFIG: ${{ secrets.KSM_CONFIG }}
