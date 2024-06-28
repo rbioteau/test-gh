@@ -1,0 +1,26 @@
+name: Dynamic Matrix Job
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - name: Prepare matrices
+        id: matrix
+        run: >
+          echo 'MACOS_CODESIGN_MATRIX=${{ format('{{\"include\": [ {{ \"artifact\" : \"enterprise-macos-archive \", \"filename\" : \"BonitaStudioSubscription-{0}.app\" }}] }}', '2022.2-SNAPSHOT' ) }}' >> "$GITHUB_OUTPUT"
+
+  build:
+    runs-on: ubuntu-latest
+    needs: matrix
+    strategy:
+      matrix: ${{fromJson(needs.matrix.outputs.matrix)}}
+    steps:
+      - name: Build and test
+        run: |
+          echo ${{ matrix. artifact }}
+          echo ${{ matrix. filename }}
