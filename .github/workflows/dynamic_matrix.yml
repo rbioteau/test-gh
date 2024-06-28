@@ -7,12 +7,12 @@ jobs:
   matrix:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.matrix.outputs.matrix }}
+      matrix: ${{ steps.matrix.outputs.MACOS_CODESIGN_MATRIX }}
     steps:
       - name: Prepare matrices
         id: matrix
         run: >
-          echo 'MACOS_CODESIGN_MATRIX="${{ format('{{"include": [ {{ "artifact" : "enterprise-macos-archive ", "filename" : "BonitaStudioSubscription-{0}.app" }}] }}', '2022.2-SNAPSHOT' ) }}"' >> "$GITHUB_OUTPUT"
+          echo 'MACOS_CODESIGN_MATRIX=${{ format('{{"include": [ {{ "artifact" : "enterprise-macos-archive ", "filename" : "BonitaStudioSubscription-{0}.app" }}] }}', '2022.2-SNAPSHOT' ) }}' >> "$GITHUB_OUTPUT"
 
   build:
     runs-on: ubuntu-latest
